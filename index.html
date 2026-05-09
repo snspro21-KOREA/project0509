@@ -170,10 +170,21 @@
         <div class="courses-grid">
           <!-- Course 1 -->
           <div class="card">
-            <!-- Used cloudinary placeholder for demo, or gradient from design system -->
-            <div class="card-img" style="background: linear-gradient(135deg, var(--primary-200), var(--primary-400)); height: 200px;">
-              <i class="ti ti-video" style="font-size:64px;color:white"></i>
-              <div class="card-img-overlay"><span class="badge badge-solid-primary">인기</span></div>
+            <!-- 유튜브: youtube-nocookie.com, fs=0(전체화면 비활성화), rel=0(관련영상 표시안함), modestbranding=1 -->
+            <div class="card-media-wrap">
+              <div class="card-media-overlay"></div>
+              <iframe
+                class="card-media-iframe"
+                src="https://www.youtube-nocookie.com/embed/VIDEO_ID_1?rel=0&modestbranding=1&fs=0&disablekb=0&color=white"
+                title="AI영상콘텐츠제작전문가 1의급 강의 영상"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                referrerpolicy="strict-origin"
+                loading="lazy">
+              </iframe>
+              <div class="card-img-overlay" style="top:8px;right:8px;bottom:auto;left:auto;background:none;">
+                <span class="badge badge-solid-primary">인기</span>
+              </div>
             </div>
             <div class="card-body">
               <div class="card-category">AI · 콘텐츠 제작</div>
@@ -191,9 +202,20 @@
 
           <!-- Course 2 -->
           <div class="card">
-            <div class="card-img" style="background: linear-gradient(135deg, var(--secondary-200), var(--secondary-400)); height: 200px;">
-              <i class="ti ti-brand-youtube" style="font-size:64px;color:white"></i>
-              <div class="card-img-overlay"><span class="badge badge-solid-success">NEW</span></div>
+            <div class="card-media-wrap">
+              <div class="card-media-overlay"></div>
+              <iframe
+                class="card-media-iframe"
+                src="https://www.youtube-nocookie.com/embed/VIDEO_ID_2?rel=0&modestbranding=1&fs=0&disablekb=0&color=white"
+                title="AI영상콘텐츠제작전문가 2의급 강의 영상"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                referrerpolicy="strict-origin"
+                loading="lazy">
+              </iframe>
+              <div class="card-img-overlay" style="top:8px;right:8px;bottom:auto;left:auto;background:none;">
+                <span class="badge badge-solid-success">NEW</span>
+              </div>
             </div>
             <div class="card-body">
               <div class="card-category">AI · 콘텐츠 제작</div>

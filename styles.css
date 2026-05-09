@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   /* === Brand Colors === */
   --primary-50: #E8F0FF;
   --primary-100: #C1D4FE;
@@ -365,3 +365,49 @@ tbody tr:hover { background: var(--neutral-50); }
 /* ===== FOOTER ===== */
 .ds-footer { text-align: center; padding: 40px; color: var(--neutral-400); font-size: var(--font-size-sm); border-top: 1px solid var(--neutral-200); margin-top: 80px; }
 .ds-footer strong { color: var(--primary-600); }
+
+/* ===== COURSE MEDIA (YouTube / Image) ===== */
+/* 고정 16:9 비율 컨테이너 — 크기 변경 불가, URL 노출 없음 */
+.card-media-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* 항상 16:9 비율 고정 */
+  overflow: hidden;
+  background: #0f0f0f;
+  border-radius: 0;        /* 카드 상단 모서리는 카드 자체가 처리 */
+  user-select: none;
+}
+
+/* iframe 자체 — 컨테이너에 꽉 차게 */
+.card-media-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: auto;   /* 재생 컨트롤 동작 */
+  display: block;
+}
+
+/* 투명 오버레이 — 우클릭 메뉴(URL 복사 등) 차단, 드래그 방지 */
+.card-media-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: transparent;
+  pointer-events: none;   /* 마우스 이벤트는 iframe에게 전달 */
+  /* 우클릭만 막으려면 JS oncontextmenu로 처리 (아래 참조) */
+}
+
+/* 이미지 타입일 경우 */
+.card-media-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;   /* 이미지 드래그/우클릭 저장 방지 */
+  user-select: none;
+  -webkit-user-drag: none;
+}
