@@ -6,13 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const formMessage = document.getElementById('formMessage');
   const loginBtn = document.getElementById('loginBtn');
   const logoutBtn = document.getElementById('logoutBtn');
+  const userChip        = document.getElementById('userChip');
+  const userAvatar      = document.getElementById('userAvatar');
+  const userDisplayName = document.getElementById('userDisplayName');
 
   // Auth state: toggle login/logout button + auto-save user to Firestore
   onAuthStateChanged(auth, async (user) => {
     if (loginBtn && logoutBtn) {
       if (user) {
-        loginBtn.style.display = 'none';
+        loginBtn.style.display  = 'none';
         logoutBtn.style.display = 'inline-flex';
+
+        // Show user chip
+        if (userChip) {
+          const name = user.displayName || user.email.split('@')[0];
+          userAvatar.textContent      = name.charAt(0).toUpperCase();
+          userDisplayName.textContent = name;
+          userChip.style.display      = 'inline-flex';
+        }
 
         // Auto-create Firestore profile if not exists (catches existing Auth users)
         try {
@@ -35,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         loginBtn.style.display = 'inline-flex';
         logoutBtn.style.display = 'none';
+        if (userChip) userChip.style.display = 'none';
       }
     }
   });
