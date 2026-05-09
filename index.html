@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>에스앤에스프로 교육원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Custom Structural Styles */
+    header {
+      position: sticky;
+      top: 0;
+      background: white;
+      border-bottom: 1px solid var(--neutral-200);
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--primary-700);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-menu {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .nav-menu a {
+      font-size: var(--font-size-base);
+      font-weight: 500;
+      color: var(--neutral-700);
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+    .nav-menu a:hover {
+      color: var(--primary-600);
+    }
+    .section-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+    .footer {
+      background: var(--neutral-900);
+      color: var(--neutral-400);
+      padding: 60px 32px;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: var(--font-size-sm);
+    }
+    .footer-title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .footer-info-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .about-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--neutral-200);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div style="width: 32px; height: 32px; background: var(--primary-500); color: white; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;">
+          <i class="ti ti-book-2"></i>
+        </div>
+        에스앤에스프로 교육원
+      </a>
+      <nav class="nav-menu">
+        <a href="#about">기관소개</a>
+        <a href="#certification">자격증안내</a>
+        <a href="#courses">교육프로그램</a>
+        <a href="#apply">자격증신청</a>
+        <a href="login.html" id="loginBtn" class="btn btn-primary btn-sm" style="color: white;">로그인</a>
+        <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none;">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <!-- HERO -->
+    <section class="section-container" style="padding-top: 40px; padding-bottom: 40px;">
+      <div class="ds-hero" style="margin-bottom: 0;">
+        <div class="ds-hero-inner">
+          <div class="ds-hero-badge">민간자격증발급기관 · 온라인교육</div>
+          <h1>당신의 미래를 그리는 곳,<br>에스앤에스프로 교육원</h1>
+          <p>AI 시대에 꼭 필요한 맞춤형 영상 콘텐츠 제작 전문가로 성장하세요. <br>전문 강사진과 실무 중심 커리큘럼이 함께합니다.</p>
+          <div class="ds-hero-meta" style="margin-top: 24px;">
+            <a href="#apply" class="btn btn-primary btn-lg" style="background: white; color: var(--primary-900);">자격증 신청하기 <i class="ti ti-arrow-right"></i></a>
+            <a href="#courses" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.3); color: white;">교육프로그램 보기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT (기관소개) -->
+    <section id="about" class="section-container" style="background: var(--neutral-50);">
+      <h2 class="ds-section-title">기관소개</h2>
+      <p class="ds-section-desc">에스앤에스프로 교육원은 민간자격증 발급 기관으로, 전문적이고 실무적인 온라인 교육을 제공합니다.</p>
+      
+      <div class="about-card">
+        <h3 style="font-size: var(--font-size-xl); margin-bottom: 8px;">에스앤에스프로 교육원</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px; color: var(--neutral-700);">
+          <div style="display: flex; align-items: center; gap: 8px;"><i class="ti ti-user" style="color: var(--primary-500);"></i> <strong>대표:</strong> 최재경</div>
+          <div style="display: flex; align-items: center; gap: 8px;"><i class="ti ti-phone" style="color: var(--primary-500);"></i> <strong>연락처:</strong> 010-3466-8552</div>
+          <div style="display: flex; align-items: center; gap: 8px;"><i class="ti ti-mail" style="color: var(--primary-500);"></i> <strong>이메일:</strong> snspro@naver.com</div>
+          <div style="display: flex; align-items: center; gap: 8px;"><i class="ti ti-map-pin" style="color: var(--primary-500);"></i> <strong>찾아오는 길:</strong> 부산광역시 북구 화명동 1412-5 2층</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATION & COURSES (자격증안내 / 교육프로그램) -->
+    <section id="certification" class="section-container">
+      <div id="courses">
+        <h2 class="ds-section-title">자격증 안내 & 교육프로그램</h2>
+        <p class="ds-section-desc">AI 트렌드에 맞춘 핵심 자격증 과정을 소개합니다.</p>
+
+        <div class="courses-grid">
+          <!-- Course 1 -->
+          <div class="card">
+            <!-- Used cloudinary placeholder for demo, or gradient from design system -->
+            <div class="card-img" style="background: linear-gradient(135deg, var(--primary-200), var(--primary-400)); height: 200px;">
+              <i class="ti ti-video" style="font-size:64px;color:white"></i>
+              <div class="card-img-overlay"><span class="badge badge-solid-primary">인기</span></div>
+            </div>
+            <div class="card-body">
+              <div class="card-category">AI · 콘텐츠 제작</div>
+              <div class="card-title">AI영상콘텐츠제작전문가 1급</div>
+              <div class="card-text">생성형 AI 툴을 활용한 고급 영상 기획, 제작 및 편집 실무를 마스터합니다. 전문가 수준의 포트폴리오를 완성할 수 있습니다.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+                <span class="badge badge-primary">국가등록 민간자격</span>
+                <span class="badge badge-success">온라인수강</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm" style="width: 100%; justify-content: center;">수강 신청하기</a>
+            </div>
+          </div>
+
+          <!-- Course 2 -->
+          <div class="card">
+            <div class="card-img" style="background: linear-gradient(135deg, var(--secondary-200), var(--secondary-400)); height: 200px;">
+              <i class="ti ti-brand-youtube" style="font-size:64px;color:white"></i>
+              <div class="card-img-overlay"><span class="badge badge-solid-success">NEW</span></div>
+            </div>
+            <div class="card-body">
+              <div class="card-category">AI · 콘텐츠 제작</div>
+              <div class="card-title">AI영상콘텐츠제작전문가 2급</div>
+              <div class="card-text">AI 영상 제작의 기초 이론부터 기본 툴 활용법까지, 누구나 쉽게 시작할 수 있는 입문 맞춤 과정입니다.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+                <span class="badge badge-primary">국가등록 민간자격</span>
+                <span class="badge badge-success">온라인수강</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#apply" class="btn btn-outline btn-sm" style="width: 100%; justify-content: center;">수강 신청하기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPLY (자격증신청) -->
+    <section id="apply" class="section-container" style="background: var(--neutral-50);">
+      <h2 class="ds-section-title">자격증 신청</h2>
+      <p class="ds-section-desc">온라인으로 간편하게 자격증 과정을 신청하세요.</p>
+
+      <div class="card" style="max-width: 600px; margin: 0 auto; padding: 32px;">
+        <form id="registrationForm">
+          <div class="form-group">
+            <label class="form-label">이름 <span class="required">*</span></label>
+            <input id="userName" class="form-input" type="text" placeholder="홍길동" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">연락처 <span class="required">*</span></label>
+            <input id="userPhone" class="form-input" type="tel" placeholder="010-0000-0000" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">신청 과정 <span class="required">*</span></label>
+            <select id="courseSelect" class="form-input form-select" required>
+              <option value="">과정을 선택해 주세요</option>
+              <option value="AI영상콘텐츠제작전문가 1급">AI영상콘텐츠제작전문가 1급</option>
+              <option value="AI영상콘텐츠제작전문가 2급">AI영상콘텐츠제작전문가 2급</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">이메일</label>
+            <input id="userEmail" class="form-input" type="email" placeholder="example@email.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">메모 (선택사항)</label>
+            <textarea id="userMemo" class="form-input" rows="3" placeholder="문의사항이나 남기실 말씀을 적어주세요."></textarea>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">신청 완료하기</button>
+          <div id="formMessage" style="margin-top: 16px; font-size: var(--font-size-sm); text-align: center;"></div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-title">에스앤에스프로 교육원</div>
+      <div class="footer-info-row">
+        <div class="footer-info-item">대표: 최재경</div>
+        <div class="footer-info-item">연락처: 010-3466-8552</div>
+        <div class="footer-info-item">이메일: snspro@naver.com</div>
+      </div>
+      <div class="footer-info-row">
+        <div class="footer-info-item">주소: 부산광역시 북구 화명동 1412-5 2층</div>
+      </div>
+      <div style="margin-top: 24px; color: var(--neutral-600); font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span>&copy; 2026 에스앤에스프로 교육원. All Rights Reserved.</span>
+        <a href="admin.html" style="color: var(--neutral-500); text-decoration: underline; font-weight: 500;">관리자 모드</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

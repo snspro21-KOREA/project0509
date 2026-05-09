@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 대시보드 - 에스앤에스프로 교육원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0f172a;
+      font-family: var(--font-primary);
+      color: var(--neutral-900);
+      min-height: 100vh;
+    }
+
+    /* ── GATE / LOCK SCREEN ─────────────────────────────── */
+    #gateScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    }
+    .gate-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 56px 48px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+    .gate-icon {
+      width: 72px; height: 72px;
+      background: rgba(26,79,212,0.25);
+      border: 1.5px solid rgba(26,79,212,0.5);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; color: #7aa5f8;
+      margin: 0 auto 24px;
+    }
+    .gate-title { font-size: 22px; font-weight: 700; color: white; margin-bottom: 8px; }
+    .gate-desc  { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 32px; line-height: 1.6; }
+    .btn-gate {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; padding: 13px 20px;
+      border-radius: 10px; border: none;
+      font-family: var(--font-primary); font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-gate-google {
+      background: white; color: #1f2937;
+    }
+    .btn-gate-google:hover { background: #f1f5f9; }
+    .btn-gate-google svg { width: 18px; height: 18px; }
+
+    /* Gate form inputs */
+    .gate-form { margin-bottom: 16px; text-align: left; }
+    .gate-label {
+      display: block; font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.55); margin-bottom: 6px;
+    }
+    .gate-input {
+      width: 100%; height: 42px; padding: 0 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: white; font-size: 14px;
+      font-family: var(--font-primary); outline: none;
+      transition: border-color .15s;
+    }
+    .gate-input::placeholder { color: rgba(255,255,255,0.3); }
+    .gate-input:focus { border-color: rgba(100,140,255,0.6); background: rgba(255,255,255,0.1); }
+    .btn-gate-primary {
+      background: var(--primary-500); color: white;
+      margin-bottom: 0;
+    }
+    .btn-gate-primary:hover { background: var(--primary-600); }
+    .gate-or-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0;
+      color: rgba(255,255,255,0.25); font-size: 12px;
+    }
+    .gate-or-divider::before, .gate-or-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+    #gateError {
+      margin-top: 14px; font-size: 12px;
+      color: #fca5a5; min-height: 18px; text-align: center;
+    }
+
+    /* ── DASHBOARD LAYOUT ───────────────────────────────── */
+    #dashboardScreen { display: none; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px; position: fixed; top: 0; left: 0; bottom: 0;
+      background: #0f172a;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      display: flex; flex-direction: column; padding: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px;
+      background: var(--primary-500); color: white;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .sidebar-logo-text { font-size: 13px; font-weight: 700; color: white; line-height: 1.3; }
+    .sidebar-logo-sub  { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.55); cursor: pointer;
+      text-decoration: none; transition: all .15s;
+    }
+    .sidebar-item i { font-size: 18px; }
+    .sidebar-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .sidebar-item.active { background: rgba(26,79,212,0.25); color: #93b4fd; }
+    .sidebar-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      padding: 16px 12px 4px;
+    }
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+    }
+    .sidebar-user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--primary-500); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .sidebar-user-name  { font-size: 12px; font-weight: 600; color: white; }
+    .sidebar-user-email { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .btn-logout-sm {
+      margin-top: 8px; width: 100%;
+      background: none; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; color: rgba(255,255,255,0.5);
+      padding: 7px 12px; font-size: 12px; font-weight: 500;
+      cursor: pointer; font-family: var(--font-primary);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: all .15s;
+    }
+    .btn-logout-sm:hover { border-color: rgba(255,255,255,0.3); color: white; }
+
+    /* Main content */
+    .dashboard-main {
+      margin-left: 240px;
+      background: #f1f5f9;
+      min-height: 100vh;
+    }
+    .dashboard-topbar {
+      background: white;
+      border-bottom: 1px solid var(--neutral-200);
+      padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-title { font-size: 18px; font-weight: 700; color: var(--neutral-900); }
+    .topbar-breadcrumb { font-size: 12px; color: var(--neutral-500); margin-top: 2px; }
+    .dashboard-body { padding: 32px; }
+
+    /* Stats Row */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-tile {
+      background: white; border-radius: 14px;
+      border: 1px solid var(--neutral-200);
+      padding: 20px 22px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .stat-tile-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .stat-tile-num { font-size: 28px; font-weight: 800; line-height: 1; color: var(--neutral-900); }
+    .stat-tile-lbl { font-size: 12px; color: var(--neutral-500); margin-top: 4px; }
+
+    /* Table card */
+    .table-card {
+      background: white; border-radius: 16px;
+      border: 1px solid var(--neutral-200);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .table-card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .table-card-title { font-size: 16px; font-weight: 700; color: var(--neutral-900); }
+    .table-card-sub   { font-size: 12px; color: var(--neutral-500); margin-top: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: var(--neutral-50); }
+    th {
+      padding: 11px 16px; text-align: left;
+      font-size: 11px; font-weight: 600;
+      color: var(--neutral-500); text-transform: uppercase;
+      letter-spacing: .06em; border-bottom: 1px solid var(--neutral-200);
+      white-space: nowrap;
+    }
+    td { padding: 13px 16px; border-bottom: 1px solid var(--neutral-100); color: var(--neutral-800); }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--neutral-50); }
+
+    .empty-state, .loading-state {
+      text-align: center; padding: 56px 24px;
+      color: var(--neutral-400); font-size: 14px;
+    }
+    .empty-state i, .loading-state i { font-size: 40px; display: block; margin-bottom: 12px; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinning { display: inline-block; animation: spin 1s linear infinite; }
+
+    /* Admin Manager Card */
+    .admin-mgr-card {
+      background: white; border-radius: 16px;
+      border: 1px solid var(--neutral-200);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      margin-top: 24px; overflow: hidden;
+    }
+    .admin-mgr-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-mgr-title { font-size: 15px; font-weight: 700; color: var(--neutral-900); }
+    .admin-mgr-sub   { font-size: 12px; color: var(--neutral-500); margin-top: 2px; }
+    .admin-add-row {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex; gap: 10px; align-items: center;
+    }
+    .admin-add-row input {
+      flex: 1; height: 38px; padding: 0 12px;
+      border: 1.5px solid var(--neutral-300);
+      border-radius: 8px; font-size: 13px;
+      font-family: var(--font-primary); outline: none;
+      transition: border-color .15s;
+    }
+    .admin-add-row input:focus { border-color: var(--primary-500); }
+    .admin-list { padding: 8px 24px 16px; }
+    .admin-list-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-radius: 8px; transition: background .1s;
+    }
+    .admin-list-item:hover { background: var(--neutral-50); }
+    .admin-list-item-info { display: flex; align-items: center; gap: 10px; }
+    .admin-list-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--primary-100); color: var(--primary-700);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .admin-list-email { font-size: 13px; font-weight: 500; color: var(--neutral-800); }
+    .admin-list-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: .04em;
+      padding: 2px 7px; border-radius: 99px;
+      background: var(--primary-50); color: var(--primary-700);
+      border: 1px solid var(--primary-200); margin-left: 6px;
+    }
+    .admin-list-tag.super {
+      background: #fef9c3; color: #854d0e; border-color: #fde68a;
+    }
+    .btn-del-admin {
+      background: none; border: none;
+      color: var(--neutral-400); cursor: pointer; padding: 4px;
+      border-radius: 6px; font-size: 16px; transition: all .15s;
+    }
+    .btn-del-admin:hover { background: var(--error-50); color: var(--error-500); }
+    #adminMsgBar { padding: 0 24px 12px; font-size: 12px; min-height: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── GATE SCREEN (로그인/권한 체크) ──────────────────── -->
+  <div id="gateScreen">
+    <div class="gate-card">
+      <div class="gate-icon"><i class="ti ti-shield-lock"></i></div>
+      <div class="gate-title">관리자 전용 영역</div>
+      <div class="gate-desc">승인된 관리자 계정으로 로그인하세요.</div>
+
+      <!-- Email/Password Form -->
+      <div class="gate-form">
+        <label class="gate-label">이메일</label>
+        <input id="gateEmail" class="gate-input" type="email" placeholder="admin@example.com" autocomplete="email">
+      </div>
+      <div class="gate-form">
+        <label class="gate-label">비밀번호</label>
+        <input id="gatePassword" class="gate-input" type="password" placeholder="비밀번호" autocomplete="current-password">
+      </div>
+      <button class="btn-gate btn-gate-primary" id="gateEmailBtn">
+        <i class="ti ti-login"></i> 로그인
+      </button>
+
+      <!-- Divider -->
+      <div class="gate-or-divider">또는</div>
+
+      <!-- Google Login -->
+      <button class="btn-gate btn-gate-google" id="gateGoogleBtn">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Google 계정으로 로그인
+      </button>
+
+      <a href="index.html" style="display:block;margin-top:16px;font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;text-align:center;">← 홈으로 돌아가기</a>
+      <div id="gateError"></div>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD SCREEN ─────────────────────────────────── -->
+  <div id="dashboardScreen">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><i class="ti ti-book-2"></i></div>
+        <div>
+          <div class="sidebar-logo-text">SNS Pro</div>
+          <div class="sidebar-logo-sub">관리자 대시보드</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">메인</div>
+        <a class="sidebar-item active" id="navRegistrations" href="#"><i class="ti ti-clipboard-list"></i> 수강 신청 내역</a>
+        <a class="sidebar-item" id="navAdmins" href="#"><i class="ti ti-shield-check"></i> 관리자 관리</a>
+        <div class="sidebar-section-label">사이트</div>
+        <a class="sidebar-item" href="index.html"><i class="ti ti-home"></i> 홈으로 가기</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar" id="sidebarAvatarText">A</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebarUserName">관리자</div>
+            <div class="sidebar-user-email" id="sidebarUserEmail">-</div>
+          </div>
+        </div>
+        <button class="btn-logout-sm" id="dashboardLogoutBtn">
+          <i class="ti ti-logout"></i> 로그아웃
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="dashboard-main">
+      <div class="dashboard-topbar">
+        <div>
+          <div class="topbar-title">수강 신청 관리</div>
+          <div class="topbar-breadcrumb">자격과정 등록관리 &rsaquo; 수강 신청 내역</div>
+        </div>
+        <button id="refreshBtn" class="btn btn-outline btn-sm">
+          <i class="ti ti-refresh"></i> 새로고침
+        </button>
+      </div>
+
+      <div class="dashboard-body">
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-tile">
+            <div class="stat-tile-icon" style="background:#EEF2FF;color:#4F46E5;"><i class="ti ti-clipboard-list"></i></div>
+            <div>
+              <div class="stat-tile-num" id="statTotal">-</div>
+              <div class="stat-tile-lbl">총 신청 건수</div>
+            </div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-icon" style="background:#F0FDF4;color:#16A34A;"><i class="ti ti-certificate"></i></div>
+            <div>
+              <div class="stat-tile-num" id="statGrade1">-</div>
+              <div class="stat-tile-lbl">1급 신청</div>
+            </div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-icon" style="background:#FFF7ED;color:#EA580C;"><i class="ti ti-certificate-2"></i></div>
+            <div>
+              <div class="stat-tile-num" id="statGrade2">-</div>
+              <div class="stat-tile-lbl">2급 신청</div>
+            </div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-icon" style="background:#FEF2F2;color:#DC2626;"><i class="ti ti-calendar-event"></i></div>
+            <div>
+              <div class="stat-tile-num" id="statToday">-</div>
+              <div class="stat-tile-lbl">오늘 신청</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div>
+              <div class="table-card-title">수강 신청 내역</div>
+              <div class="table-card-sub">최신 신청순으로 정렬</div>
+            </div>
+          </div>
+
+          <div id="loadingState" class="loading-state">
+            <i class="ti ti-loader spinning"></i>
+            데이터를 불러오는 중입니다...
+          </div>
+
+          <div id="tableWrapper" style="display:none; overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>신청일시</th>
+                  <th>이름</th>
+                  <th>연락처</th>
+                  <th>신청 과정</th>
+                  <th>이메일</th>
+                  <th>메모</th>
+                </tr>
+              </thead>
+              <tbody id="registrationsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div id="emptyState" class="empty-state" style="display:none;">
+            <i class="ti ti-inbox"></i>
+            아직 수강 신청 내역이 없습니다.
+          </div>
+        </div>
+
+        <!-- Admin Manager Card -->
+        <div class="admin-mgr-card" id="adminMgrCard" style="display:none;">
+          <div class="admin-mgr-header">
+            <div>
+              <div class="admin-mgr-title"><i class="ti ti-shield-check" style="color:var(--primary-500);"></i> 관리자 계정 관리</div>
+              <div class="admin-mgr-sub">등록된 관리자만 이 대시보드에 접근할 수 있습니다.</div>
+            </div>
+          </div>
+          <div class="admin-add-row">
+            <input type="email" id="newAdminEmail" placeholder="추가할 관리자 이메일 주소">
+            <button class="btn btn-primary btn-sm" id="addAdminBtn"><i class="ti ti-plus"></i> 추가</button>
+          </div>
+          <div id="adminMsgBar"></div>
+          <div class="admin-list" id="adminList"><!-- injected --></div>
+        </div>
+
+      </div><!-- /dashboard-body -->
+    </div><!-- /dashboard-main -->
+  </div><!-- /dashboardScreen -->
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
