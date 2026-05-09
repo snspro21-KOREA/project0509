@@ -1,5 +1,86 @@
 import { db, collection, addDoc, serverTimestamp, doc, getDoc, setDoc, auth, signOut, onAuthStateChanged } from './firebase.js';
 
+// ─── Config ─────────────────────────────────────────────
+const SUPER_ADMIN = 'snspro@naver.com';
+
+async function isAdmin(user) {
+  if (!user) return false;
+  if (user.email === SUPER_ADMIN) return true;
+  try {
+    const snap = await getDoc(doc(db, 'admins', user.email));
+    return snap.exists();
+  } catch { return false; }
+}
+
+// ─── Load & update course media from Firestore ────────────────
+async function loadCourseMedia() {
+  try {
+    const snap = await getDoc(doc(db, 'siteConfig', 'courses'));
+    if (snap.exists()) {
+      const d = snap.data();
+      if (d.course1) updateCourseMedia(1, d.course1);
+      if (d.course2) updateCourseMedia(2, d.course2);
+    }
+  } catch (e) { console.warn('loadCourseMedia:', e); }
+}
+
+function updateCourseMedia(courseNum, videoId) {
+  const wrap = document.querySelector(`[data-course="${courseNum}"]`);
+  if (!wrap) return;
+  wrap.dataset.videoId = videoId;
+  const img = wrap.querySelector('.card-media-image');
+  if (img) img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+}
+
+// ─── Show admin edit buttons ──────────────────────────────
+function showAdminEditBtns(show) {
+  [1, 2].forEach(n => {
+    const btn = document.getElementById(`editBtn${n}`);
+    if (btn) btn.style.display = show ? 'inline-flex' : 'none';
+  });
+}
+
+// ─── Save video edit (called from inline script) ──────────────
+window.saveVideoEdit = async function() {
+  const courseNum = document.getElementById('veCourseNum').value;
+  const input     = document.getElementById('veInput').value.trim();
+  const msgEl     = document.getElementById('veMsg');
+  const saveBtn   = document.getElementById('veSaveBtn');
+
+  const videoId = parseYouTubeId(input);
+  if (!videoId) {
+    msgEl.innerHTML = '<span style="color:#DC2626">유효한 유튜브 주소나 ID를 입력해주세요.</span>';
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = '저장 중...';
+  msgEl.innerHTML = '';
+
+  try {
+    // Firestore에 저장
+    await setDoc(doc(db, 'siteConfig', 'courses'),
+      { [`course${courseNum}`]: videoId },
+      { merge: true }
+    );
+    // UI 업데이트
+    updateCourseMedia(courseNum, videoId);
+    msgEl.innerHTML = '<span style="color:#16A34A">✔ 저장되었습니다!</span>';
+    setTimeout(() => {
+      document.getElementById('veModal').style.display = 'none';
+      msgEl.innerHTML = '';
+    }, 1200);
+  } catch (e) {
+    msgEl.innerHTML = '<span style="color:#DC2626">저장 중 오류가 발생했습니다.</span>';
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="ti ti-device-floppy"></i> 저장';
+  }
+};
+
+// Init: load video IDs from Firestore on page load
+loadCourseMedia();
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registrationForm');
   const submitBtn = document.getElementById('submitBtn');
@@ -42,6 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
           console.warn('Firestore user sync error:', e);
         }
+
+        // Show edit buttons if admin
+        const adminOk = await isAdmin(user);
+        showAdminEditBtns(adminOk);
 
       } else {
         loginBtn.style.display = 'inline-flex';

@@ -445,3 +445,23 @@ tbody tr:hover { background: var(--neutral-50); }
   user-select: none;
   -webkit-user-drag: none;
 }
+
+/* Edit button on course media (admin only) */
+.media-edit-btn {
+  position: absolute;
+  bottom: 10px; left: 10px;
+  z-index: 20;
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px;
+  background: rgba(79, 70, 229, 0.92);
+  color: white; font-size: 12px; font-weight: 600;
+  border: none; border-radius: 99px;
+  cursor: pointer; font-family: var(--font-primary);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transition: background .15s, transform .15s;
+}
+.media-edit-btn:hover {
+  background: rgba(67, 56, 202, 1);
+  transform: scale(1.03);
+}
