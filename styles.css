@@ -195,19 +195,53 @@ body { font-family: var(--font-primary); color: var(--neutral-900); background: 
 .form-select { -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236C757D' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; }
 
 /* ===== 6. CARDS ===== */
-.card { background: white; border-radius: var(--radius-xl); border: 1px solid var(--neutral-200); overflow: hidden; transition: all var(--transition-base); }
+.card { background: white; border-radius: var(--radius-xl); border: 1px solid var(--neutral-200); overflow: hidden; transition: all var(--transition-base); display: flex; flex-direction: column; }
 .card:hover { box-shadow: var(--shadow-md); border-color: var(--neutral-300); transform: translateY(-2px); }
 .card-img { width: 100%; height: 160px; background: linear-gradient(135deg, var(--primary-100), var(--primary-300)); display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary-400); position: relative; overflow: hidden; }
 .card-img-overlay { position: absolute; top: 10px; right: 10px; }
-.card-body { padding: 16px; }
+.card-body { padding: 16px; flex: 1; }
 .card-category { font-size: var(--font-size-xs); font-weight: 600; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
 .card-title { font-size: var(--font-size-md); font-weight: 700; color: var(--neutral-900); margin-bottom: 8px; line-height: 1.4; }
 .card-text { font-size: var(--font-size-sm); color: var(--neutral-600); line-height: 1.6; margin-bottom: 12px; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--neutral-50); border-top: 1px solid var(--neutral-200); }
+.card-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--neutral-50); border-top: 1px solid var(--neutral-200); margin-top: auto; }
 .card-stat { font-size: var(--font-size-xs); color: var(--neutral-500); display: flex; align-items: center; gap: 4px; }
 .card-stat i { font-size: 14px; }
 .card-price { font-size: var(--font-size-xl); font-weight: 700; color: var(--primary-600); }
 .card-price span { font-size: var(--font-size-sm); font-weight: 400; color: var(--neutral-500); }
+
+/* Courses grid — equal height 2-column */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+@media (max-width: 640px) {
+  .courses-grid { grid-template-columns: 1fr; }
+}
+
+/* Click-to-play facade */
+.card-media-facade {
+  cursor: pointer;
+}
+.card-media-facade:hover .media-play-btn {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(26, 79, 212, 0.92);
+}
+.media-play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px; height: 64px;
+  background: rgba(26, 79, 212, 0.82);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 26px;
+  z-index: 5;
+  transition: all .2s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
 
 /* Certificate card */
 .cert-card { border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--neutral-200); background: white; }

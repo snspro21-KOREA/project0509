@@ -170,18 +170,16 @@
         <div class="courses-grid">
           <!-- Course 1 -->
           <div class="card">
-            <!-- 유튜브: youtube-nocookie.com, fs=0(전체화면 비활성화), rel=0(관련영상 표시안함), modestbranding=1 -->
-            <div class="card-media-wrap">
-              <div class="card-media-overlay"></div>
-              <iframe
-                class="card-media-iframe"
-                src="https://www.youtube-nocookie.com/embed/VIDEO_ID_1?rel=0&modestbranding=1&fs=0&disablekb=0&color=white"
-                title="AI영상콘텐츠제작전문가 1의급 강의 영상"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-                referrerpolicy="strict-origin"
-                loading="lazy">
-              </iframe>
+            <div class="card-media-wrap card-media-facade"
+                 data-video-id="VIDEO_ID_1"
+                 onclick="playVideo(this)"
+                 oncontextmenu="return false;">
+              <!-- 주소 노이 없는 유튜브 퍼사드: 클릭시 제자리에서 재생 -->
+              <img class="card-media-image"
+                   src="https://img.youtube.com/vi/VIDEO_ID_1/maxresdefault.jpg"
+                   alt="AI영상콘텐츠제작전문가 1급 견본"
+                   onerror="this.style.background='linear-gradient(135deg,#94b3fc,#3269e8)';this.style.objectFit='cover';">
+              <div class="media-play-btn"><i class="ti ti-player-play-filled"></i></div>
               <div class="card-img-overlay" style="top:8px;right:8px;bottom:auto;left:auto;background:none;">
                 <span class="badge badge-solid-primary">인기</span>
               </div>
@@ -202,17 +200,15 @@
 
           <!-- Course 2 -->
           <div class="card">
-            <div class="card-media-wrap">
-              <div class="card-media-overlay"></div>
-              <iframe
-                class="card-media-iframe"
-                src="https://www.youtube-nocookie.com/embed/VIDEO_ID_2?rel=0&modestbranding=1&fs=0&disablekb=0&color=white"
-                title="AI영상콘텐츠제작전문가 2의급 강의 영상"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-                referrerpolicy="strict-origin"
-                loading="lazy">
-              </iframe>
+            <div class="card-media-wrap card-media-facade"
+                 data-video-id="VIDEO_ID_2"
+                 onclick="playVideo(this)"
+                 oncontextmenu="return false;">
+              <img class="card-media-image"
+                   src="https://img.youtube.com/vi/VIDEO_ID_2/maxresdefault.jpg"
+                   alt="AI영상콘텐츠제작전문가 2급 견본"
+                   onerror="this.style.background='linear-gradient(135deg,#FFD54F,#FF8F00)';this.style.objectFit='cover';">
+              <div class="media-play-btn"><i class="ti ti-player-play-filled"></i></div>
               <div class="card-img-overlay" style="top:8px;right:8px;bottom:auto;left:auto;background:none;">
                 <span class="badge badge-solid-success">NEW</span>
               </div>
@@ -298,5 +294,29 @@
   </footer>
 
   <script type="module" src="app.js"></script>
+
+  <!-- 클릭-to-play: 유튜브 영상을 해당 위치에서 제자리 재생 -->
+  <script>
+    function playVideo(el) {
+      const vid = el.dataset.videoId;
+      if (!vid || vid.startsWith('VIDEO_ID')) {
+        alert('영상 ID가 아직 설정되지 않았습니다.\n유튜브 영상 ID를 입력해주세요.'); return;
+      }
+      // 주소 노없이, 전체화면 없이 포함 실제자리 재생
+      el.innerHTML = `
+        <iframe
+          class="card-media-iframe"
+          src="https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1&fs=0&color=white"
+          title="강의 영상"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+          referrerpolicy="strict-origin">
+        </iframe>`;
+      el.onclick = null;
+      el.oncontextmenu = null;
+      el.style.cursor = 'default';
+      el.classList.remove('card-media-facade');
+    }
+  </script>
 </body>
 </html>
