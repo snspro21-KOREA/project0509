@@ -117,10 +117,11 @@
         <a href="#courses">교육프로그램</a>
         <a href="#apply">자격증신청</a>
         <!-- 로그인 사용자 표시 -->
-        <div id="userChip" style="display:none; align-items:center; gap:8px; padding: 4px 10px 4px 4px; background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: 99px;">
+        <a href="profile.html" id="userChip" style="display:none; align-items:center; gap:8px; padding: 4px 10px 4px 4px; background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: 99px; text-decoration:none; cursor:pointer; transition: background .15s;" onmouseover="this.style.background='var(--primary-100)'" onmouseout="this.style.background='var(--primary-50)'">
           <div id="userAvatar" style="width:26px; height:26px; border-radius:50%; background:var(--primary-500); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;">?</div>
           <span id="userDisplayName" style="font-size:13px; font-weight:500; color:var(--primary-700); max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
-        </div>
+          <i class="ti ti-chevron-right" style="font-size:13px; color:var(--primary-400);"></i>
+        </a>
         <a href="login.html" id="loginBtn" class="btn btn-primary btn-sm" style="color: white;">로그인</a>
         <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none;">로그아웃</button>
       </nav>

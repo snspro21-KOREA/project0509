@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 정보 설정 - 에스앤에스프로 교육원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: var(--neutral-100);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* Top bar */
+    .profile-topbar {
+      background: white;
+      border-bottom: 1px solid var(--neutral-200);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .profile-topbar-left {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .profile-topbar-logo {
+      font-size: 15px; font-weight: 700; color: var(--neutral-900);
+      text-decoration: none;
+    }
+    .profile-topbar-sep {
+      color: var(--neutral-300); font-size: 18px;
+    }
+    .profile-topbar-page {
+      font-size: 14px; color: var(--neutral-500);
+    }
+
+    /* Layout */
+    .profile-container {
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+    .profile-hero {
+      background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
+      border-radius: var(--radius-2xl);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      color: white;
+    }
+    .profile-hero-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .profile-hero-name {
+      font-size: 22px; font-weight: 700; margin-bottom: 4px;
+    }
+    .profile-hero-email {
+      font-size: 14px; opacity: .65;
+    }
+    .profile-hero-badge {
+      margin-top: 8px;
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 3px 10px; border-radius: 99px;
+      font-size: 12px;
+    }
+
+    /* Section card */
+    .setting-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--neutral-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .setting-card-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .setting-card-header i {
+      font-size: 18px; color: var(--primary-500);
+    }
+    .setting-card-title {
+      font-size: 15px; font-weight: 700; color: var(--neutral-900);
+    }
+    .setting-card-body { padding: 20px 24px; }
+
+    /* Input label group */
+    .field-group { margin-bottom: 18px; }
+    .field-group:last-child { margin-bottom: 0; }
+    .field-label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--neutral-700); margin-bottom: 6px;
+    }
+    .field-hint {
+      font-size: 12px; color: var(--neutral-500); margin-top: 5px;
+    }
+    .field-readonly {
+      padding: 10px 14px;
+      background: var(--neutral-50);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      font-size: 14px; color: var(--neutral-600);
+      font-family: var(--font-primary);
+    }
+
+    /* Message bar */
+    .msg-bar {
+      margin-top: 16px;
+      font-size: 13px; min-height: 20px;
+    }
+
+    /* Danger zone */
+    .danger-zone {
+      border: 1.5px solid var(--error-200, #fecaca);
+      background: var(--error-50, #fef2f2);
+    }
+    .danger-zone .setting-card-header {
+      border-bottom-color: var(--error-100, #fee2e2);
+    }
+    .danger-zone .setting-card-header i { color: var(--error-500, #ef4444); }
+    .danger-zone .setting-card-title { color: var(--error-700, #b91c1c); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="profile-topbar">
+    <div class="profile-topbar-left">
+      <a href="index.html" class="profile-topbar-logo">
+        <i class="ti ti-book-2" style="color:var(--primary-500);"></i> 에스앤에스프로 교육원
+      </a>
+      <span class="profile-topbar-sep">/</span>
+      <span class="profile-topbar-page">내 정보 설정</span>
+    </div>
+    <a href="index.html" style="font-size:13px; color:var(--neutral-500); text-decoration:none;">
+      <i class="ti ti-arrow-left"></i> 홈으로
+    </a>
+  </div>
+
+  <div id="profileContainer" class="profile-container" style="display:none;">
+
+    <!-- Hero -->
+    <div class="profile-hero">
+      <div class="profile-hero-avatar" id="heroAvatar">?</div>
+      <div>
+        <div class="profile-hero-name" id="heroName">-</div>
+        <div class="profile-hero-email" id="heroEmail">-</div>
+        <div class="profile-hero-badge" id="heroBadge">
+          <i class="ti ti-shield-check"></i> <span id="heroProvider">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기본 정보 -->
+    <div class="setting-card">
+      <div class="setting-card-header">
+        <i class="ti ti-user"></i>
+        <div class="setting-card-title">기본 정보</div>
+      </div>
+      <div class="setting-card-body">
+        <div class="field-group">
+          <label class="field-label">이메일</label>
+          <div class="field-readonly" id="profileEmail">-</div>
+          <p class="field-hint">이메일은 변경할 수 없습니다.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="profileName">이름</label>
+          <input class="form-input" type="text" id="profileName" placeholder="이름을 입력하세요">
+        </div>
+        <button class="btn btn-primary" id="saveNameBtn">
+          <i class="ti ti-device-floppy"></i> 저장
+        </button>
+        <div class="msg-bar" id="nameMsg"></div>
+      </div>
+    </div>
+
+    <!-- 비밀번호 변경 (이메일 가입자만) -->
+    <div class="setting-card" id="pwCard">
+      <div class="setting-card-header">
+        <i class="ti ti-lock"></i>
+        <div class="setting-card-title">비밀번호 변경</div>
+      </div>
+      <div class="setting-card-body">
+        <div class="field-group">
+          <label class="field-label" for="currentPw">현재 비밀번호</label>
+          <input class="form-input" type="password" id="currentPw" placeholder="현재 비밀번호" autocomplete="current-password">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="newPw">새 비밀번호</label>
+          <input class="form-input" type="password" id="newPw" placeholder="8자 이상" autocomplete="new-password">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="newPwConfirm">새 비밀번호 확인</label>
+          <input class="form-input" type="password" id="newPwConfirm" placeholder="새 비밀번호 재입력" autocomplete="new-password">
+        </div>
+        <button class="btn btn-primary" id="savePwBtn">
+          <i class="ti ti-lock-check"></i> 비밀번호 변경
+        </button>
+        <div class="msg-bar" id="pwMsg"></div>
+      </div>
+    </div>
+
+    <!-- 로그아웃 -->
+    <div class="setting-card danger-zone">
+      <div class="setting-card-header">
+        <i class="ti ti-logout"></i>
+        <div class="setting-card-title">계정 관리</div>
+      </div>
+      <div class="setting-card-body">
+        <p style="font-size:14px;color:var(--neutral-600);margin-bottom:16px;">현재 기기에서 로그아웃합니다.</p>
+        <button class="btn btn-outline" id="profileLogoutBtn" style="border-color:var(--error-300,#fca5a5);color:var(--error-600,#dc2626);">
+          <i class="ti ti-logout"></i> 로그아웃
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Not logged in -->
+  <div id="notLoggedIn" class="profile-container" style="display:none;text-align:center;padding-top:80px;">
+    <i class="ti ti-lock" style="font-size:48px;color:var(--neutral-300);display:block;margin-bottom:16px;"></i>
+    <p style="font-size:16px;color:var(--neutral-500);margin-bottom:24px;">로그인이 필요한 페이지입니다.</p>
+    <a href="login.html" class="btn btn-primary">로그인하기</a>
+  </div>
+
+  <script type="module" src="profile.js"></script>
+</body>
+</html>
