@@ -349,6 +349,7 @@
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">메인</div>
         <a class="sidebar-item active" id="navRegistrations" href="#"><i class="ti ti-clipboard-list"></i> 수강 신청 내역</a>
+        <a class="sidebar-item" id="navMembers" href="#"><i class="ti ti-users"></i> 회원 명단</a>
         <a class="sidebar-item" id="navAdmins" href="#"><i class="ti ti-shield-check"></i> 관리자 관리</a>
         <div class="sidebar-section-label">사이트</div>
         <a class="sidebar-item" href="index.html"><i class="ti ti-home"></i> 홈으로 가기</a>
@@ -464,6 +465,38 @@
           </div>
           <div id="adminMsgBar"></div>
           <div class="admin-list" id="adminList"><!-- injected --></div>
+        </div>
+
+        <!-- Members Card -->
+        <div class="table-card" id="membersCard" style="display:none;">
+          <div class="table-card-header">
+            <div>
+              <div class="table-card-title"><i class="ti ti-users" style="color:var(--primary-500);"></i> 회원 명단</div>
+              <div class="table-card-sub">회원가입한 사용자 목록 (가입일 기준 최신순)</div>
+            </div>
+          </div>
+          <div id="membersLoadingState" class="loading-state">
+            <i class="ti ti-loader spinning"></i>
+            회원 정보를 불러오는 중입니다...
+          </div>
+          <div id="membersTableWrapper" style="display:none; overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>가입일시</th>
+                  <th>이름</th>
+                  <th>이메일</th>
+                  <th>가입 방법</th>
+                </tr>
+              </thead>
+              <tbody id="membersTableBody"></tbody>
+            </table>
+          </div>
+          <div id="membersEmptyState" class="empty-state" style="display:none;">
+            <i class="ti ti-inbox"></i>
+            등록된 회원이 없습니다.
+          </div>
         </div>
 
       </div><!-- /dashboard-body -->

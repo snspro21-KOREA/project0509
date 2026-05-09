@@ -38,7 +38,14 @@ const addAdminBtn   = document.getElementById('addAdminBtn');
 const adminMsgBar   = document.getElementById('adminMsgBar');
 // Nav
 const navRegistrations = document.getElementById('navRegistrations');
+const navMembers       = document.getElementById('navMembers');
 const navAdmins        = document.getElementById('navAdmins');
+// Members
+const membersCard         = document.getElementById('membersCard');
+const membersLoadingState = document.getElementById('membersLoadingState');
+const membersTableWrapper = document.getElementById('membersTableWrapper');
+const membersEmptyState   = document.getElementById('membersEmptyState');
+const membersTableBody    = document.getElementById('membersTableBody');
 
 // ─── Nav switching ────────────────────────────────────────
 const regSection   = document.getElementById('loadingState').closest('.table-card').parentElement; // dashboard-body sub
@@ -48,34 +55,44 @@ navRegistrations.addEventListener('click', (e) => {
   e.preventDefault();
   switchPanel('registrations');
 });
+navMembers.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchPanel('members');
+});
 navAdmins.addEventListener('click', (e) => {
   e.preventDefault();
-  if (isSuperAdmin()) {
-    switchPanel('admins');
-  } else {
-    showAdminMsg('슈퍼 어드민만 관리자 목록을 관리할 수 있습니다.', 'error');
-    switchPanel('admins'); // still show the card with the message
-  }
+  switchPanel('admins');
 });
 
 function switchPanel(panel) {
   currentPanel = panel;
-  const tableCard  = document.querySelector('.table-card');
-  const statsRow   = document.querySelector('.stats-row');
+  const regTableCard = document.querySelector('.table-card:not(#membersCard)');
+  const statsRow     = document.querySelector('.stats-row');
+  const allNavItems  = [navRegistrations, navMembers, navAdmins];
+
+  // Reset all nav
+  allNavItems.forEach(n => n?.classList.remove('active'));
+
+  // Hide all panels
+  statsRow.style.display      = 'none';
+  regTableCard.style.display  = 'none';
+  adminMgrCard.style.display  = 'none';
+  membersCard.style.display   = 'none';
 
   if (panel === 'registrations') {
     navRegistrations.classList.add('active');
-    navAdmins.classList.remove('active');
-    statsRow.style.display   = '';
-    tableCard.style.display  = '';
-    adminMgrCard.style.display = 'none';
+    statsRow.style.display     = '';
+    regTableCard.style.display = '';
     document.querySelector('.topbar-title').textContent      = '수강 신청 관리';
     document.querySelector('.topbar-breadcrumb').textContent = '자격과정 등록관리 › 수강 신청 내역';
-  } else {
+  } else if (panel === 'members') {
+    navMembers.classList.add('active');
+    membersCard.style.display = '';
+    document.querySelector('.topbar-title').textContent      = '회원 명단';
+    document.querySelector('.topbar-breadcrumb').textContent = '회원 관리 › 회원 명단';
+    fetchMembers();
+  } else if (panel === 'admins') {
     navAdmins.classList.add('active');
-    navRegistrations.classList.remove('active');
-    statsRow.style.display   = 'none';
-    tableCard.style.display  = 'none';
     adminMgrCard.style.display = '';
     document.querySelector('.topbar-title').textContent      = '관리자 계정 관리';
     document.querySelector('.topbar-breadcrumb').textContent = '설정 › 관리자 관리';
@@ -181,7 +198,11 @@ gateGoogleBtn.addEventListener('click', async () => {
 
 // ─── Logout ───────────────────────────────────────────────
 dashboardLogoutBtn.addEventListener('click', () => signOut(auth));
-refreshBtn.addEventListener('click', () => { if (currentPanel === 'registrations') fetchRegistrations(); else fetchAdminList(); });
+refreshBtn.addEventListener('click', () => {
+  if (currentPanel === 'registrations') fetchRegistrations();
+  else if (currentPanel === 'members') fetchMembers();
+  else fetchAdminList();
+});
 
 // ─── Fetch Registrations ──────────────────────────────────
 async function fetchRegistrations() {
@@ -304,4 +325,48 @@ function showAdminMsg(msg, type = 'success') {
   const color = type === 'success' ? 'var(--success-500)' : 'var(--error-500)';
   adminMsgBar.innerHTML = `<span style="color:${color};"><i class="ti ti-${type==='success'?'check':'alert-circle'}"></i> ${msg}</span>`;
   setTimeout(() => { adminMsgBar.innerHTML = ''; }, 4000);
+}
+
+// ─── Fetch Members ────────────────────────────────────────
+async function fetchMembers() {
+  membersLoadingState.style.display = 'block';
+  membersTableWrapper.style.display = 'none';
+  membersEmptyState.style.display   = 'none';
+  membersTableBody.innerHTML = '';
+
+  try {
+    const q    = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      membersEmptyState.style.display = 'block';
+    } else {
+      let idx = 0;
+      snap.forEach((docSnap) => {
+        idx++;
+        const d = docSnap.data();
+        const createdAt = d.createdAt?.toDate();
+        const dateStr   = createdAt ? createdAt.toLocaleString('ko-KR') : '-';
+        const providerBadge = d.provider === 'google'
+          ? `<span class="badge badge-info">Google</span>`
+          : `<span class="badge badge-neutral">이메일</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color:var(--neutral-400);font-size:12px;">${idx}</td>
+          <td style="white-space:nowrap;font-size:12px;color:var(--neutral-500);">${dateStr}</td>
+          <td style="font-weight:600;">${d.name || '-'}</td>
+          <td style="color:var(--neutral-600);">${d.email || '-'}</td>
+          <td>${providerBadge}</td>`;
+        membersTableBody.appendChild(tr);
+      });
+      membersTableWrapper.style.display = 'block';
+    }
+  } catch (err) {
+    console.error(err);
+    membersEmptyState.style.display = 'block';
+    membersEmptyState.innerHTML = `<i class="ti ti-alert-circle" style="color:var(--error-500);"></i><br>회원 정보를 불러오지 못했습니다.`;
+  } finally {
+    membersLoadingState.style.display = 'none';
+  }
 }

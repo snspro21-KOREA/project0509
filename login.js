@@ -1,6 +1,7 @@
 import {
   auth, provider,
-  signInWithPopup, signOut, onAuthStateChanged
+  signInWithPopup, signOut, onAuthStateChanged,
+  db, doc, setDoc, serverTimestamp
 } from './firebase.js';
 
 import {
@@ -72,6 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, pw);
         await updateProfile(cred.user, { displayName: name });
+        // Save user profile to Firestore
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          name,
+          email,
+          uid: cred.user.uid,
+          provider: 'email',
+          createdAt: serverTimestamp()
+        });
         showMessage(`${name}님, 가입을 환영합니다!`, 'success');
         // onAuthStateChanged will redirect
       } catch (e) {
