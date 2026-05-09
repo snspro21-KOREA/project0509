@@ -1,4 +1,4 @@
-import { db, collection, addDoc, serverTimestamp, auth, signOut, onAuthStateChanged } from './firebase.js';
+import { db, collection, addDoc, serverTimestamp, doc, getDoc, setDoc, auth, signOut, onAuthStateChanged } from './firebase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registrationForm');
@@ -7,12 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.getElementById('loginBtn');
   const logoutBtn = document.getElementById('logoutBtn');
 
-  // Auth state: toggle login/logout button
-  onAuthStateChanged(auth, (user) => {
+  // Auth state: toggle login/logout button + auto-save user to Firestore
+  onAuthStateChanged(auth, async (user) => {
     if (loginBtn && logoutBtn) {
       if (user) {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-flex';
+
+        // Auto-create Firestore profile if not exists (catches existing Auth users)
+        try {
+          const userRef = doc(db, 'users', user.uid);
+          const snap = await getDoc(userRef);
+          if (!snap.exists()) {
+            const isGoogle = user.providerData?.[0]?.providerId === 'google.com';
+            await setDoc(userRef, {
+              name:      user.displayName || user.email.split('@')[0],
+              email:     user.email,
+              uid:       user.uid,
+              provider:  isGoogle ? 'google' : 'email',
+              createdAt: serverTimestamp()
+            });
+          }
+        } catch (e) {
+          console.warn('Firestore user sync error:', e);
+        }
+
       } else {
         loginBtn.style.display = 'inline-flex';
         logoutBtn.style.display = 'none';
